@@ -47,4 +47,8 @@ public class PrenotazioneService {
         this.prenotazioneRepository.delete(found);
     }
 
+    public List<Prenotazione> findByUtente(Utente utente) {
+        return prenotazioneRepository.findByUtente(utente);
+    }
+
 }

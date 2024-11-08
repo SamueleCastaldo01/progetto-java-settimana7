@@ -1,6 +1,7 @@
 package castaldosamuele.progetto_java_settimana7.Controllers;
 
 import castaldosamuele.progetto_java_settimana7.Exceptions.BadRequestException;
+import castaldosamuele.progetto_java_settimana7.Exceptions.UnauthorizedException;
 import castaldosamuele.progetto_java_settimana7.Payloads.NewPrenotazioneDTO;
 import castaldosamuele.progetto_java_settimana7.entities.Prenotazione;
 import castaldosamuele.progetto_java_settimana7.entities.Utente;
@@ -45,7 +46,6 @@ public class PrenotazioneController {
     }
 
 
-
     //questo lo dovrebbe vedere solamente l'admin, ma per semplcità lo ho messo generico
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -53,4 +53,27 @@ public class PrenotazioneController {
         this.prenotazioneService.findByIdAndDelete(id);
     }
 
+
+    // /Me endpoints----------------------------------------------------------------
+    @GetMapping("/me")
+    public List<Prenotazione> getMyPrenotazioni(@AuthenticationPrincipal Utente currentAuthenticatedUser) {
+        return prenotazioneService.findByUtente(currentAuthenticatedUser);
+    }
+
+
+    @DeleteMapping("/me/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePrenotazione(
+            @PathVariable long id,
+            @AuthenticationPrincipal Utente currentAuthenticatedUser) {
+
+            //verifica se l'id è corretto
+            Prenotazione prenotazione = prenotazioneService.findById(id);
+
+        if (prenotazione == null || prenotazione.getUtente().getId() != currentAuthenticatedUser.getId()) {
+            throw new UnauthorizedException("Non puoi eliminare una prenotazione che non ti appartiene!");
+        }
+
+        prenotazioneService.findByIdAndDelete(id);
+    }
 }
