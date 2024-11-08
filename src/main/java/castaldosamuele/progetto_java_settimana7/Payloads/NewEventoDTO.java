@@ -15,9 +15,7 @@ public record NewEventoDTO(
         @NotEmpty(message = "Il luogo è obbligatorio")
         String luogo,
         @NotNull(message = "Il numero di posti è obbligatorio!")
-        int posti,
-        @NotNull(message = "L'id del utente è obbligatorio!")
-        long id_utente
+        int posti
 ) {
 
 }

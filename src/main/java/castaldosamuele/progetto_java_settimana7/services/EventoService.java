@@ -27,8 +27,7 @@ public class EventoService {
     }
 
     //POST --------------------------------------------
-    public Evento save(NewEventoDTO body) {
-        Utente utente = utenteService.findById(body.id_utente());
+    public Evento save(NewEventoDTO body, Utente utente) {
         Evento newEvento = new Evento(body.titolo(), body.descrizione(), body.date(), body.luogo(), body.posti(), utente);
         return this.eventoRepository.save(newEvento);
     }
