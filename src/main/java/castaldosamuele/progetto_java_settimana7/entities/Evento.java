@@ -14,19 +14,19 @@ public class Evento {
     private String descrizione;
     private LocalDate date;
     private String luogo;
-    private int post;
+    private int posti;
     @ManyToOne
     @JoinColumn(name = "utente_id")
     private Utente utente;
 
     public Evento() {}
 
-    public Evento(String titolo, String descrizione, LocalDate date, String luogo, int post, Utente utente) {
+    public Evento(String titolo, String descrizione, LocalDate date, String luogo, int posti, Utente utente) {
         this.titolo = titolo;
         this.descrizione = descrizione;
         this.date = date;
         this.luogo = luogo;
-        this.post = post;
+        this.posti = posti;
         this.utente = utente;
     }
 
@@ -67,11 +67,11 @@ public class Evento {
     }
 
     public int getPost() {
-        return post;
+        return posti;
     }
 
     public void setPost(int post) {
-        this.post = post;
+        this.posti = post;
     }
 
     public Utente getUtente() {
@@ -90,7 +90,7 @@ public class Evento {
                 ", descrizione='" + descrizione + '\'' +
                 ", date=" + date +
                 ", luogo='" + luogo + '\'' +
-                ", post=" + post +
+                ", post=" + posti +
                 ", utente=" + utente +
                 '}';
     }
