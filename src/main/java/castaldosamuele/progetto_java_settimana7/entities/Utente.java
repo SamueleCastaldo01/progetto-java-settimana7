@@ -1,10 +1,16 @@
 package castaldosamuele.progetto_java_settimana7.entities;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name =  "utenti")
-public class Utente {
+public class Utente implements UserDetails {
     @Id
     @GeneratedValue
     private long id;
@@ -77,6 +83,10 @@ public class Utente {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(this.role.name()));
     }
 
     @Override
