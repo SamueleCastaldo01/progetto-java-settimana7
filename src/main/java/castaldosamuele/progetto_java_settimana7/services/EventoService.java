@@ -1,5 +1,6 @@
 package castaldosamuele.progetto_java_settimana7.services;
 
+import castaldosamuele.progetto_java_settimana7.Exceptions.BadRequestException;
 import castaldosamuele.progetto_java_settimana7.Exceptions.NotFoundException;
 import castaldosamuele.progetto_java_settimana7.Payloads.NewEventoDTO;
 import castaldosamuele.progetto_java_settimana7.Repositories.EventoRepository;
@@ -33,8 +34,12 @@ public class EventoService {
     }
 
     //PUT --------------------------------------------
-    public Evento findByIdAndUpdate(long id, NewEventoDTO body) {
+    public Evento findByIdAndUpdate(long id, NewEventoDTO body, Utente utente) {
         Evento found = this.findById(id);
+
+        //Solamente il creatore dell'evento lo può eliminarlo
+        if(found.getUtente().getId() != utente.getId())
+            throw new BadRequestException("NOn hai i permessi per modificare questo evento");
 
         found.setTitolo(body.titolo());
         found.setDescrizione(body.descrizione());
@@ -46,8 +51,11 @@ public class EventoService {
     }
 
     //DELETE --------------------------------------------
-    public void findByIdAndDelete(long id) {
+    public void findByIdAndDelete(long id, Utente utente) {
         Evento found = this.findById(id);
+        if(found.getUtente().getId() != utente.getId())
+            throw new BadRequestException("NOn hai i permessi per eliminare questo evento");
+
         this.eventoRepository.delete(found);
     }
 

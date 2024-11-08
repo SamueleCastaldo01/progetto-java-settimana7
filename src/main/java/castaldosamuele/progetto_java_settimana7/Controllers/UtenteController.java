@@ -22,6 +22,7 @@ public class UtenteController {
     @Autowired
     UtenteService utenteService;
 
+    //questo dovrebbe essere visto solamente dall'admin, ma non lo ho aggiunto perché non è richiesto
     @GetMapping
     public List<Utente> findAll() {
         return this.utenteService.findAll();
@@ -45,7 +46,8 @@ public class UtenteController {
     }
 
     // il resto dei metodi----------------------------------------------------------------
-    //questi dovrebbero essere tutti metodi da parte del admin
+    //questi sono tutti metodi da parte del admin
+    //questi in realtà non servono, ma li ho messi per testare
     @GetMapping("/{id}")
     public Utente findById(@PathVariable long id) {
         return this.utenteService.findById(id);

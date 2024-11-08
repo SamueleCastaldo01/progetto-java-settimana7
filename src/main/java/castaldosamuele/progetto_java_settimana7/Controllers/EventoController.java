@@ -22,13 +22,13 @@ public class EventoController {
     @Autowired
     EventoService eventoService;
 
-    //Senza permessi per semplicità ma dovrebbe essere un admin
+    //Senza permessi per semplicità, questo effettivamente dovrebbe appartenere a tutti, dato che sono pubblici gli eventi
     @GetMapping
     public List<Evento> findAll() {
         return this.eventoService.findAll();
     }
 
-    //Senza permessi per semplicità ma dovrebbe essere un admin
+    //Senza permessi per semplicità, questo effettivamente dovrebbe appartenere a tutti
     @GetMapping("/{id}")
     public Evento findById(@PathVariable long id) {
         return this.eventoService.findById(id);
@@ -49,22 +49,24 @@ public class EventoController {
         return this.eventoService.save(body, currentAuthenticatedUser);
     }
 
+    //la modifica deve avvenire solamente per un organizzatore
+    //con lo stesso id di chi lo ha creato
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ORGANIZER')")
-    public Evento findByIdAndUpdate(@PathVariable long id, @RequestBody @Validated NewEventoDTO body, BindingResult validationResult) {
+    public Evento findByIdAndUpdate(@PathVariable long id, @RequestBody @Validated NewEventoDTO body, BindingResult validationResult, @AuthenticationPrincipal Utente currentAuthenticatedUser) {
         if (validationResult.hasErrors()) {
             validationResult.getAllErrors().forEach(System.out::println);
             throw new BadRequestException("Ci sono stati errori nel payload!");
         }
-        // Ovunque ci sia un body bisognerebbe validarlo!
-        return this.eventoService.findByIdAndUpdate(id, body);
+        return this.eventoService.findByIdAndUpdate(id, body, currentAuthenticatedUser);
     }
 
+    //l' eliminazione deve avvenire solamente per un organizzatore
+    //con lo stesso id utente di chi lo ha creato
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ORGANIZER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void findByIdAndDelete(@PathVariable long id) {
-        this.eventoService.findByIdAndDelete(id);
+    public void findByIdAndDelete(@PathVariable long id, @AuthenticationPrincipal Utente currentAuthenticatedUser) {
+        this.eventoService.findByIdAndDelete(id, currentAuthenticatedUser);
     }
-
 }
