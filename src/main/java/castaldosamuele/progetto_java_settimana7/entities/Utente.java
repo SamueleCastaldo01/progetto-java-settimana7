@@ -3,7 +3,7 @@ package castaldosamuele.progetto_java_settimana7.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name =  "utente")
+@Table(name =  "utenti")
 public class Utente {
     @Id
     @GeneratedValue
