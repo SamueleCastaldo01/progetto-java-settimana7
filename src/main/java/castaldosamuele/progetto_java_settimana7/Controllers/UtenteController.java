@@ -79,5 +79,4 @@ public class UtenteController {
     public void findByIdAndDelete(@PathVariable long id) {
         this.utenteService.findByIdAndDelete(id);
     }
-
 }
