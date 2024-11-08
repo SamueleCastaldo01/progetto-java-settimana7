@@ -40,9 +40,14 @@ public class PrenotazioneService {
 
         //qui devo fare il controllo sul numero di posti
         long numeroPrenotazioni = prenotazioneRepository.countByEvento(evento);
-
         if (numeroPrenotazioni >= evento.getPost()) {
             throw new BadRequestException("Non ci sono posti disponibili per questo evento.");
+        }
+
+        //un utente non si può prenotare due volte allo stesso evento
+        List<Prenotazione> prenotazioniEsistenti = prenotazioneRepository.findByUtenteAndEvento(utente, evento);
+        if (!prenotazioniEsistenti.isEmpty()) {
+            throw new BadRequestException("L'utente ha già una prenotazione per questo evento.");
         }
 
         Prenotazione newPrenotazione = new Prenotazione(utente, evento);
