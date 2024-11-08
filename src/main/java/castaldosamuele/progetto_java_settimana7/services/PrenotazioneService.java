@@ -9,9 +9,11 @@ import castaldosamuele.progetto_java_settimana7.entities.Prenotazione;
 import castaldosamuele.progetto_java_settimana7.entities.Utente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class PrenotazioneService {
 
     @Autowired
@@ -33,8 +35,8 @@ public class PrenotazioneService {
     }
 
     //POST --------------------------------------------
-    public Prenotazione save(NewPrenotazioneDTO body, Utente utente) {
-        Evento evento = eventoService.findById(body.id_evento());
+    public Prenotazione save(long id_evento, Utente utente) {
+        Evento evento = eventoService.findById(id_evento);
         Prenotazione newPrenotazione = new Prenotazione(utente, evento);
         return this.prenotazioneRepository.save(newPrenotazione);
     }

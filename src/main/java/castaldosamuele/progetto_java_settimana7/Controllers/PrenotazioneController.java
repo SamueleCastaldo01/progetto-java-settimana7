@@ -35,17 +35,13 @@ public class PrenotazioneController {
         return this.prenotazioneService.findById(id);
     }
 
-    @PostMapping
-    @PreAuthorize("hasAuthority('USER')")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Prenotazione save(@RequestBody @Validated NewPrenotazioneDTO body, BindingResult validationResult, @AuthenticationPrincipal Utente currentAuthenticatedUser) {
-        if (validationResult.hasErrors()) {
-            String message = validationResult.getAllErrors().stream().map(objectError -> objectError.getDefaultMessage())
-                    .collect(Collectors.joining(". "));
-            throw new BadRequestException("Ci sono stati errori nel payload! " + message);
-        }
 
-        return this.prenotazioneService.save(body, currentAuthenticatedUser);
+    @PostMapping("/{id_evento}")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ORGANIZER')")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Prenotazione save(@PathVariable long id_evento, @AuthenticationPrincipal Utente currentAuthenticatedUser) {
+
+        return this.prenotazioneService.save(id_evento, currentAuthenticatedUser);
     }
 
 
