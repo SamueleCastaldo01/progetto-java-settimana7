@@ -1,0 +1,48 @@
+package castaldosamuele.progetto_java_settimana7.services;
+
+import castaldosamuele.progetto_java_settimana7.Exceptions.BadRequestException;
+import castaldosamuele.progetto_java_settimana7.Exceptions.NotFoundException;
+import castaldosamuele.progetto_java_settimana7.Payloads.NewPrenotazioneDTO;
+import castaldosamuele.progetto_java_settimana7.Repositories.PrenotazioneRepository;
+import castaldosamuele.progetto_java_settimana7.entities.Evento;
+import castaldosamuele.progetto_java_settimana7.entities.Prenotazione;
+import castaldosamuele.progetto_java_settimana7.entities.Utente;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.List;
+
+public class PrenotazioneService {
+
+    @Autowired
+    private PrenotazioneRepository prenotazioneRepository;
+
+    @Autowired
+    private PasswordEncoder bcrypt;
+
+    @Autowired
+    private EventoService eventoService;
+
+    //GET --------------------------------------------
+    public List<Prenotazione> findAll() {
+        return this.prenotazioneRepository.findAll();
+    }
+
+    public Prenotazione findById(long id) {
+        return this.prenotazioneRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+    }
+
+    //POST --------------------------------------------
+    public Prenotazione save(NewPrenotazioneDTO body, Utente utente) {
+        Evento evento = eventoService.findById(body.id_evento());
+        Prenotazione newPrenotazione = new Prenotazione(utente, evento);
+        return this.prenotazioneRepository.save(newPrenotazione);
+    }
+
+    //DELETE --------------------------------------------
+    public void findByIdAndDelete(long id) {
+        Prenotazione found = this.findById(id);
+        this.prenotazioneRepository.delete(found);
+    }
+
+}
