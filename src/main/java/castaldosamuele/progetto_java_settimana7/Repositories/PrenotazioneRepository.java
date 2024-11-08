@@ -1,6 +1,7 @@
 package castaldosamuele.progetto_java_settimana7.Repositories;
 
 
+import castaldosamuele.progetto_java_settimana7.entities.Evento;
 import castaldosamuele.progetto_java_settimana7.entities.Prenotazione;
 import castaldosamuele.progetto_java_settimana7.entities.Utente;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,5 @@ import java.util.List;
 @Repository
 public interface PrenotazioneRepository extends JpaRepository<Prenotazione, Long> {
     List<Prenotazione> findByUtente(Utente utente);
+    long countByEvento(Evento evento);
 }

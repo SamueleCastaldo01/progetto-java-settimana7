@@ -37,6 +37,14 @@ public class PrenotazioneService {
     //POST --------------------------------------------
     public Prenotazione save(long id_evento, Utente utente) {
         Evento evento = eventoService.findById(id_evento);
+
+        //qui devo fare il controllo sul numero di posti
+        long numeroPrenotazioni = prenotazioneRepository.countByEvento(evento);
+
+        if (numeroPrenotazioni >= evento.getPost()) {
+            throw new BadRequestException("Non ci sono posti disponibili per questo evento.");
+        }
+
         Prenotazione newPrenotazione = new Prenotazione(utente, evento);
         return this.prenotazioneRepository.save(newPrenotazione);
     }
